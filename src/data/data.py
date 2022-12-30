@@ -36,7 +36,7 @@ class Data:
 
         elif dataset_type=='Adversarial':
             if target is not None:
-                self._images, self._names_images = utils.load_adversarials_from_folder(data_path + '/' + 'Target_' + str(target))
+                self._images, self._names_images = utils.load_adversarials_from_folder(data_path + '/' + 'target_' + str(target))
                 self._images_shape = self._images.shape[1:]
                 self._no_images    = self._images.shape[0]
                 self._labels = np.array([[target]]*self._no_images)
