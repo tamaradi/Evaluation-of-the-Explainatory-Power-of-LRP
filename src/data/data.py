@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import utils
+import data.utils as utils
 from tensorflow.keras import datasets
 from tensorflow.keras.utils import to_categorical
 
@@ -18,7 +18,7 @@ class Data:
                 self._no_images    = x_train.shape[0]
                 self._names_images = np.array([str(i) for i in range(self._no_images)])
             else:
-                self._images, self._labels, self._names_images = utils.load_images_from_folder(os.path.join(data_path, dataset_type))
+                self._images, self._labels, self._names_images = utils.load_images_from_folder(data_path + '/' + dataset_type)
                 self._images_shape = self._images.shape[1:]
                 self._no_images    = self._images.shape[0]
 
@@ -30,13 +30,13 @@ class Data:
                 self._no_images    = x_test.shape[0]
                 self._names_images = np.array([str(i) for i in range(self._no_images)])
             else:
-                self._images, self._labels, self._names_images = utils.load_images_from_folder(os.path.join(data_path, dataset_type))
+                self._images, self._labels, self._names_images = utils.load_images_from_folder(data_path + '/' + dataset_type)
                 self._images_shape = self._images.shape[1:]
                 self._no_images    = self._images.shape[0]
 
         elif dataset_type=='Adversarial':
             if target is not None:
-                self._images, self._names_images = utils.load_adversarials_from_folder(os.path.join(data_path, 'Target_' + str(target)))
+                self._images, self._names_images = utils.load_adversarials_from_folder(data_path + '/' + 'Target_' + str(target))
                 self._images_shape = self._images.shape[1:]
                 self._no_images    = self._images.shape[0]
                 self._labels = np.array([[target]]*self._no_images)
@@ -54,12 +54,13 @@ class Data:
         self._images_norm  = None
         self._labels_cat   = None
 
-        self.prep_pixels()
-        if target is None:
-            self.categorize_labels()
+        if len(self._images_shape)!= 0:
+            self.prep_pixels()
+            if target is None:
+                self.categorize_labels()
 
     def prep_pixels(self):
-        max_val = np.max(self._images)
+        max_val = np.max(self._images) if self._images.shape[0] != 0  else 1
 
         if (max_val > 1):
             # Conversion from int to float if needed

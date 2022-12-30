@@ -61,6 +61,10 @@ def load_indices(path):
 # Load images from folder
 def load_images_from_folder(path_folder_imgs):
     print("Reading images from  " + path_folder_imgs)
+    if not os.path.exists(path_folder_imgs):
+        print('Path ' + path_folder_imgs + ' doesn\'t exist!')
+        return np.array([]), np.array([]), np.array([])
+
     images, labels, img_names = [], [], []
     for filename in os.listdir(path_folder_imgs):
         filename_split = filename.split('_')
@@ -89,20 +93,7 @@ def load_adversarials_from_folder(path_folder_adv):
 
 #---------------------------------------------- UTILS READ & WRITE -----------------------------------------------------
 
-def create_headers_dist(num_dists_per_channel):
-    headers = ["name", "label", "target"]
-    for c in ['r_', 'g_', 'b_']:
-        for i in range(num_dists_per_channel):
-            h = c + str(i)
-            headers.append(h)
-    return headers
 
-def create_headers_prop(num_classes):
-    headers = ["name", "label", "target", "reached threshold", "pred calls", "gradient calls", "mean dist"]
-    for i in range(num_classes):
-        h = "c_" + str(i)
-        headers.append(h)
-    return headers
 
 def create_headers_relevances_convLayer(kernel_shape):
     width, height, depth, num_kernels = kernel_shape[0], kernel_shape[1], kernel_shape[2], kernel_shape[3]
