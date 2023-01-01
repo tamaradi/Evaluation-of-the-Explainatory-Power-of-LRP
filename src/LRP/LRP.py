@@ -27,19 +27,24 @@ class LayerwiseRelevancePropagation:
         self.names, self.weights = utils.get_model_params(self.model)
         self.num_layers = len(self.names)
 
-    def compute_relevances(self, image, img_name, path_part_1, target):
+    def compute_relevances(self, image, img_name, path_part_1, target=None, label=None, num_classes=10):
         # Get activations of the image
         activations = utils.get_activations(image, self.model)
 
-        # Save path part 2
-        path_part_2 = '_target_' + str(target) + '_' + self._LRP_type  + '.csv'
-
-        # Set initial relevance score
+        # Save path part 2 & initial relevance score
         starting_layer = self.num_layers - 2
         pre_activation_values = activations[starting_layer][0][0]  # r = self.model.predict(image)
-        r         = np.zeros(10)
-        r[target] = pre_activation_values[target]
-        r         = np.expand_dims(r, axis=0)
+        r = np.zeros(num_classes)
+        if target is not None:
+            path_part_2 = '_target_' + str(target) + '_' + self._LRP_type  + '.csv'
+            # Set initial relevance score
+            r[target] = pre_activation_values[target]
+            r         = np.expand_dims(r, axis=0)
+        elif label is not None:
+            path_part_2 = '_originals_' + self._LRP_type + '.csv'
+            # Set initial relevance score
+            r[label] = pre_activation_values[label]
+            r = np.expand_dims(r, axis=0)
 
         utils.save_relevances(r, path_part_1 + 'start_relevances' + path_part_2, img_name, 'start')
 
@@ -169,13 +174,13 @@ class LayerwiseRelevancePropagation:
     def predict_labels(self, images, dict_labels):
         return utils.predict_labels(self.model, images, dict_labels)
 
-    def run_lrp(self, images, names, target, filepath=None, lrp_type='basic'):
+    def run_lrp(self, images, names, target=None, filepath=None, label=None, num_classes=10):
         print("Running LRP on {0} images...".format(len(images)))
         total_num_imgs = len(images)
-        os.makedirs(filepath + '/' + lrp_type, exist_ok=True)
-        path = filepath + '/' + lrp_type + '/' + self.current_param + '_'
+        os.makedirs(filepath, exist_ok=True)
+        path = filepath + '/' + self.current_param + '_'
 
         for i in range(total_num_imgs):
             print(str(i+1) + ' of ' + str(total_num_imgs))
             x = np.expand_dims(images[i], axis=0)
-            self.compute_relevances(x, names[i], path, target)
+            self.compute_relevances(x, names[i], path, target, label, num_classes)

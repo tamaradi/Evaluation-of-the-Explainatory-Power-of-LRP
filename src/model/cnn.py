@@ -8,8 +8,6 @@ from tensorflow.keras import backend as K
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import model.utils as utils
 
-
-
 # Simple CNN model
 class CNN_Model:
     def __init__(self, num_classes, input_shape, learning_rate):

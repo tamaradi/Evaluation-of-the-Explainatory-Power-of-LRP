@@ -44,6 +44,35 @@ def main(opt):
         aa_utils.create_adversarials(fb_model, images, labels, names, opt.target_classes, opt.dist_type, opt.threshold, opt.max_it,
                             opt.save_path_adv, opt.save_path_dist, opt.save_path_prob, opt.save_path_nones,
                             opt.file_name_dist, opt.file_name_prob, opt.num_classes, opt.is_split)
+
+        # %%
+        PATH_1 = "./Results/Adversarials/Test/"
+        PATH_2 = "./Results/Pictures_sorted/Correct_Classification/"
+        DATA_NAME_MODEL = "./models/finalCNN_250_160_0.001_BNL"
+        TARGET = 0
+        NUM_CLASSES = 10
+        LEARNING_RATE = 0.001
+
+        adversarials_t0 = Data('Adversarial', NUM_CLASSES, PATH_1, TARGET)
+        data_test = Data('Test', NUM_CLASSES, PATH_2, None, False)
+
+        # %% LOAD CNN MODEL
+        model_instance = CNN_Model(NUM_CLASSES, adversarials_t0.image_shape(), LEARNING_RATE)
+        model_instance.load_model(DATA_NAME_MODEL)
+
+        # %% MAKE PREDICTIONS
+        prediction = model_instance.make_prediction(adversarials_t0.images(), True)
+
+        # %% ADJUST PROBABILITIES
+        NAMES = adversarials_t0.image_names()
+        ADVERSARIALS = adversarials_t0.images()
+        LABELS = adversarials_t0.labels()
+        PATH_3 = "./Results/Probabilities/"
+
+        for n, l, prob in zip(NAMES, LABELS, prediction):
+            save_probabilities_of_adv(n, l, TARGET, prob, 'False', 0, 0, 0, PATH_3, '2020-08-21_probabilities_t0')
+
+
     else:
         print('No images found!')
 
@@ -60,7 +89,7 @@ if __name__ == '__main__':
     # Parameter concerning the underlying data and loading process
     parser.add_argument('--load_from_keras', action='store_true', default=False)
     parser.add_argument('--num_classes', type=int, default=10)
-    parser.add_argument('--path_correctly_classified_imgs', type=str, default='./results/pictures_sorted/correct_classification')
+    parser.add_argument('--path_correctly_classified_imgs', type=str, default='../data/originals/correctly_classified')
     parser.add_argument('--dataset_type', type=str, default='Test')
     parser.add_argument('--is_split', action='store_true', default=True)
     parser.add_argument('--all_classes', action='store_true', default=False)

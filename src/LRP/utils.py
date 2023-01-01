@@ -78,7 +78,8 @@ def save_relevances(relevances, path, img_name, layer_type):
 def create_headers_relevances_convLayer(kernel_shape):
     width, height, depth, num_kernels = kernel_shape[0], kernel_shape[1], kernel_shape[2], kernel_shape[3]
     headers = ['name']
-    for k in range(num_kernels):
+    for k in range(
+            num_kernels):
       for d in range(depth):
         for h in range(height):
           for w in range(width):

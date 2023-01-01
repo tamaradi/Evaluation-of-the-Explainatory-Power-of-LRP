@@ -191,7 +191,7 @@ def save_probabilities_of_adv(name_img, label, target, class_prob_adversarial, r
     # save_path: path of probability file
     # file_name: name of probability file
     # -----------------------------------------------------------------------
-    path = os.path.join(save_path, file_name + ".csv")
+    path = save_path + '/' + file_name + ".csv"
     csv_file = open(path, "a+")
 
     with csv_file:
@@ -218,7 +218,7 @@ def save_Nones(name_img, label, target, save_path, file_name):
     # save_path: path of distance file
     # file_name: name of distance file
     # -----------------------------------------------------------------------
-    path = os.path.join(save_path, file_name + ".csv")
+    path = save_path + '/' + file_name + ".csv"
     csv_file = open(path, "a+")
     with csv_file:
         writer = csv.writer(csv_file, delimiter=';', lineterminator='\n')
@@ -328,7 +328,7 @@ def save_all_adversarials_of_one_img(adversarials, target_classes, save_path, da
     print('Saving all adversarials of image ' + img_name)
     for ad_ex, target in zip(adv_array, target_classes):
         if ad_ex is not None:
-            path = save_path + dataset_type + '/Target_' + str(target) + '/img_' + img_name + '_t' + str(
+            path = save_path + dataset_type + '/' + 'target_' + str(target) + '/' + 'img_' + img_name + '_t' + str(
                 target) + '.png'
             plt.imsave(fname=path, arr=ad_ex, format='png')
 
@@ -357,7 +357,7 @@ def determine_distances_to_allIMGs(original_imgs, adversarials):
 def save_distances_to_orig_imgs(names_orig_imgs, true_classes, target_classes, distances, num_dists,
                                 save_path, dataset_type, file_name):
     print("Writing distances to csv file...")
-    path = os.path.join(save_path, dataset_type, file_name + ".csv")
+    path = save_path + '/' + dataset_type, file_name + ".csv"
     csv_file = open(path, "a+")
 
     with csv_file:
