@@ -1,4 +1,4 @@
-# Evaluation of the Explainatory Power of LRP
+# Tools for Evaluating the Explainatory Power of LRP
 This repository provides source code implemented in Python 3.8 to evaluate the explainatory power of layer-wise relevance propagation (LRP) - a saliency method for visualizing and explaining the decision process of convolutional neural networks (CNNs) - using adversarial examples. Therefore, it contains the following items:
 
 * ![Simple CNN architecture](https://github.com/tamaradi/Evaluation-of-the-Explainatory-Power-of-LRP/tree/main/src/model) (incl. ![training possibilities](https://github.com/tamaradi/Evaluation-of-the-Explainatory-Power-of-LRP/blob/main/src/01_train_eval_CNN.py)), as well as the weights of a model trained on the benchmarkset CIFAR-10
