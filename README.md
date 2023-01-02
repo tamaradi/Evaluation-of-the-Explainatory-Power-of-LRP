@@ -34,3 +34,5 @@ You can find our paper ....
 ## Autors
 * Tamara R. Dieter
 * Horst Zisgen
+
+[![DOI](https://zenodo.org/badge/583320941.svg)](https://zenodo.org/badge/latestdoi/583320941)
